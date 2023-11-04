@@ -1,0 +1,25 @@
+Admin:
+    Register,Edit and Delete new admin, new employee, new Student.
+    Self Login.
+    Add Books, Edit Books, Delete books, View books.
+
+
+
+
+
+Employee:
+    Register,Edit and Delete new Student.
+    Self Login.
+    Add Books, Edit Books, Delete books, View books.
+
+Student:
+    Self registration, self login, delete account.
+    View books, Buy Book.
+    Receive all notification and update.
+
+
+Database tables:
+    user: id, name, email, phone, photo, password, user type,
+    book: id, name, category, description, price, image1, image2, qty, 
+    oders: id, user_id, bood_id, qty, order_date, order_type, status, invoice_no, inv_date, total_amt, address, 
+    subscription: id, user_id, total_amt, 
