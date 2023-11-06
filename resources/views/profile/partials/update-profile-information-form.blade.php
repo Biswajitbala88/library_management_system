@@ -7,6 +7,7 @@
         <p class="mt-1 text-sm text-gray-600">
             {{ __("Update your account's profile information and email address.") }}
         </p>
+        <img src="{{ asset('storage/' . $user->image) }}" alt="Uploaded Image" class="w-40 rounded-lg h-auto mt-4">
     </header>
 
     <form id="send-verification" method="post" action="{{ route('verification.send') }}">
