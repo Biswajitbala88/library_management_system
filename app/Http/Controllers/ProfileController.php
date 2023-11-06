@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
+
 
 class ProfileController extends Controller
 {
@@ -26,6 +28,9 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
+        
+        $user = Auth::user();
+        // dd($user);
         $request->user()->fill($request->validated());
 
         if ($request->user()->isDirty('email')) {
@@ -33,9 +38,34 @@ class ProfileController extends Controller
         }
 
         $request->user()->save();
-
+        if($request->attachment){
+            if ($request->user()->image) {
+                $oldAttachmentPath = $user->image;
+                
+                if (Storage::disk('public')->exists($oldAttachmentPath)) {
+                    // dd('111');
+                    Storage::disk('public')->delete($oldAttachmentPath);
+                }
+                $this->storeAttachment($request, $user);
+            }
+        }
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
+    protected function storeAttachment($request, $user)
+    {
+        // dd($user);
+        $extension = $request->file('attachment')->extension();
+        $contents = file_get_contents($request->file('attachment'));
+        $filename = $user->name;
+        $noSpacesString = str_replace(' ', '_', $filename);
+        $currentDateTime = date("Y-m-d_H:i:s");
+        $filenameWithDateTime = $currentDateTime . '_' . $noSpacesString;
+        $path = "images/$filenameWithDateTime.$extension";
+
+        Storage::disk('public')->put($path, $contents);
+        $user->update(['image' => $path]);
+    }
+
 
     /**
      * Delete the user's account.
@@ -57,4 +87,6 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    
 }

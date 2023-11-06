@@ -14,9 +14,17 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
+        <div class="flex items-center space-x-2 mt-1">
+            <label for="attachment" class="block mt-1 w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded cursor-pointer">
+                <i class="fas fa-upload mr-2"></i> Change
+            </label>
+            <input type="file" id="attachment" name="attachment" class="hidden" value="old('attachment')">
+        </div>
+        
+        
 
         <div>
             <x-input-label for="name" :value="__('Name')" />
