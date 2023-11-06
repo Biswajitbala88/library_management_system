@@ -7,15 +7,24 @@
         <p class="mt-1 text-sm text-gray-600">
             {{ __("Update your account's profile information and email address.") }}
         </p>
+        <img src="{{ asset('storage/' . $user->image) }}" alt="Uploaded Image" class="w-40 rounded-lg h-auto mt-4">
     </header>
 
     <form id="send-verification" method="post" action="{{ route('verification.send') }}">
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
+        <div class="flex items-center space-x-2 mt-1">
+            <label for="attachment" class="block mt-1 w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded cursor-pointer">
+                <i class="fas fa-upload mr-2"></i> Change
+            </label>
+            <input type="file" id="attachment" name="attachment" class="hidden" value="old('attachment')">
+        </div>
+        
+        
 
         <div>
             <x-input-label for="name" :value="__('Name')" />
