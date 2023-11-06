@@ -20,6 +20,13 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
+
+     public function index()
+     {
+         return view('auth.admin_register');
+     }
+
+
     public function create(): View
     {
         return view('auth.register');
@@ -34,20 +41,25 @@ class RegisteredUserController extends Controller
     {
         // dd($request->all());
 
-        
+        if($request->user_type == 'member'){
+            $userType = 'member';
+        }else{
+            $userType = $request->user_type;
+        }
 
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'phone' => ['required', 'string', 'max:10', 'regex:/^\d{10}$/'],
             'attachment' => ['required', 'image', 'mimes:jpeg,png,gif'],
+            'user_type' => ['required', 'string'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-            'user_type' => 'student',
+            'user_type' => $userType,
             'password' => Hash::make($request->password),
         ]);
         if($request->file('attachment')){
@@ -76,23 +88,5 @@ class RegisteredUserController extends Controller
         $user->update(['image' => $path]);
     }
 
-    // if($request->file('attachment')){
-    //     // dd('fca');
-    //     // Storage::disk('public')->delete($ticket->attachment);
-        
-    //     if ($ticket->attachment) {
-    //         $oldAttachmentPath = $ticket->attachment;
-    //         // dd($oldAttachmentPath);
-    //         // Check if the old attachment exists
-    //         if (Storage::disk('public')->exists($oldAttachmentPath)) {
-    //             // Delete the old attachment file
-    //             // dd('test 67687');
-    //             Storage::disk('public')->delete($oldAttachmentPath);
-    //         }
-    //         $this->storeAttachment($request, $ticket);
-    //     }
-
-        
-
-    // }
+    
 }
