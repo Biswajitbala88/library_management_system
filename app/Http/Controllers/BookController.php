@@ -66,7 +66,7 @@ class BookController extends Controller
     protected function storeAttachment($request, $book)
     {
         $extension = $request->file('attachment')->extension();
-
+        // dd($extension);
         $contents = file_get_contents($request->file('attachment'));
         $filename = $book->name;
         $noSpacesString = str_replace(' ', '_', $filename);
@@ -93,7 +93,11 @@ class BookController extends Controller
      */
     public function edit(Book $book)
     {
-        //
+        $category = Category::all();
+        $book = Book::find($book->id);
+
+        // dd($book);
+        return view('book.update')->with('category', $category)->with('book', $book);
     }
 
     /**
@@ -101,7 +105,35 @@ class BookController extends Controller
      */
     public function update(Request $request, Book $book)
     {
-        //
+        $book = Book::find($book->id);
+        // dd($request->attachment);
+        $book->name = $request->name;
+        $book->category_id = $request->category;
+        $book->price = $request->price;
+        $book->qty = $request->qty;
+        $book->description = $request->description;
+        if($request->attachment){
+            $book->image1 = $request->attachment;
+            $book->image2 = $request->attachment;
+        }else{
+            $book->image1 = $book->image1;
+            $book->image2 = $book->image2;
+        }
+        
+        
+        if ($request->hasFile('attachment')) {
+            $imagePath1 = $this->storeAttachment($request, $book);
+            $book->image1 = $imagePath1;
+        }
+        
+        if ($request->hasFile('attachment')) {
+            $imagePath2 = $this->storeAttachment($request, $book);
+            $book->image2 = $imagePath2;
+        }
+
+        $book->save();
+
+        return redirect()->route('book.index');
     }
 
     /**
@@ -109,7 +141,9 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-        //
+        $book = Book::find($book->id);
+        $book->delete();
+        return redirect()->route('book.index');
     }
 
 
