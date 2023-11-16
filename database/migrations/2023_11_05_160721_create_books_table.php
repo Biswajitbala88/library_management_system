@@ -14,13 +14,16 @@ return new class extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('category');
+            $table->unsignedBigInteger('category_id'); // Foreign key
             $table->text('description');
             $table->string('price');
             $table->string('image1');
             $table->string('image2');
             $table->string('qty');
             $table->timestamps();
+    
+            // Define the foreign key relationship
+            $table->foreign('category_id')->references('id')->on('categories');
         });
     }
 
