@@ -15,6 +15,12 @@ class BookController extends Controller
     public function index()
     {
         $books = Book::with('category')->get();
+
+        foreach ($books as $book) {
+            $categoryName = $book->category->name;
+            // Do something with $categoryName, like echoing or storing it
+        }
+        \Log::debug($books); // Check the Laravel log for the output
         return view('book.list', compact('books'));
     }
 
@@ -33,29 +39,46 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        // $book = $request->validate([
-        //     'name' => 'required',
-        //     'category' => 'required',
-        //     'price' => 'required',
-        //     'qty' => 'required',
-        //     'description' => 'required',
-        //     'attachment' => 'required',
-        // ]);
-        // Book::create($book);
-        $book = Book::create([
-            'name' => $request->name,
-            'category' => $request->category,
-            'price' => $request->price,
-            'qty' => $request->qty,
-            'description' => $request->description,
-            'image1' => $request->attachment,
-            'image2' => $request->attachment,
-        ]);
-        if($request->file('attachment')){
-            $this->storeAttachment($request, $book);
+        $book = new Book;
+        $book->name = $request->name;
+        $book->category_id = $request->category;
+        $book->price = $request->price;
+        $book->qty = $request->qty;
+        $book->description = $request->description;
+        $book->image1 = $request->attachment;
+        $book->image2 = $request->attachment;
+        
+        if ($request->hasFile('attachment')) {
+            $imagePath1 = $this->storeAttachment($request, $book);
+            $book->image1 = $imagePath1;
         }
+        
+        if ($request->hasFile('attachment')) {
+            $imagePath2 = $this->storeAttachment($request, $book);
+            $book->image2 = $imagePath2;
+        }
+
+        $book->save();
+
         return redirect()->route('book.index');
     }
+
+    protected function storeAttachment($request, $book)
+    {
+        $extension = $request->file('attachment')->extension();
+
+        $contents = file_get_contents($request->file('attachment'));
+        $filename = $book->name;
+        $noSpacesString = str_replace(' ', '_', $filename);
+        $currentDateTime = date("Y-m-d_H:i:s");
+        $filenameWithDateTime = $currentDateTime . '_' . $noSpacesString;
+        $path = "images/$filenameWithDateTime.$extension";
+        // dd($path);
+        Storage::disk('public')->put($path, $contents);
+        // $book->update(['image' => $path]);
+        return $path;
+    }
+
 
     /**
      * Display the specified resource.
@@ -90,19 +113,8 @@ class BookController extends Controller
     }
 
 
-    protected function storeAttachment($request, $book)
-    {
-        // dd($book);
-        $extension = $request->file('attachment')->extension();
-        $contents = file_get_contents($request->file('attachment'));
-        $filename = $book->name;
-        $noSpacesString = str_replace(' ', '_', $filename);
-        $currentDateTime = date("Y-m-d_H:i:s");
-        $filenameWithDateTime = $currentDateTime . '_' . $noSpacesString;
-        $path = "images/$filenameWithDateTime.$extension";
 
-        Storage::disk('public')->put($path, $contents);
-        $book->update(['image' => $path]);
-    }
+
+
 
 }

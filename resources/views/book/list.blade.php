@@ -16,6 +16,7 @@
                 <table class="w-full bg-white">
                     <thead>
                         <tr>
+                            <th class="px-6 py-2 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-600 uppercase tracking-wider">Image</th>
                             <th class="px-6 py-2 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-600 uppercase tracking-wider">Name</th>
                             <th class="px-6 py-2 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-600 uppercase tracking-wider">Category</th>
                             <th class="px-6 py-2 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-600 uppercase tracking-wider">Action</th>
@@ -24,6 +25,9 @@
                     <tbody>
                         @forelse ($books as $book)
                         <tr>
+                            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-300">
+                                <img src="{{ asset('storage/' . $book->image1) }}" width="50" />
+                            </td>
                             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-300">{{ $book->name }}</td>
                             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-300">{{ $book->category->name }}</td>
                             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-300">

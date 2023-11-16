@@ -9,7 +9,7 @@ class Book extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name','category','price','qty','description','image1','image2'
+        'name','category_id','price','qty','description','image1','image2'
     ];
 
 
@@ -17,5 +17,4 @@ class Book extends Model
     {
         return $this->belongsTo(Category::class);
     }
-
 }
