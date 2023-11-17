@@ -45,6 +45,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/book/edit/{book}', [BookController::class, 'edit'])->name('book.edit');
     Route::post('/book/update/{book}', [BookController::class, 'update'])->name('book.update');
     Route::delete('/book/{book}', [BookController::class, 'destroy'])->name('book.destroy');
+    Route::get('/book/show/{book}', [BookController::class, 'show'])->name('book.show');
+    
+
 });
 
 Route::get('/admin_register', [RegisteredUserController::class, 'index']);

@@ -19,6 +19,11 @@
                             <th class="px-6 py-2 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-600 uppercase tracking-wider">Image</th>
                             <th class="px-6 py-2 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-600 uppercase tracking-wider">Name</th>
                             <th class="px-6 py-2 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-600 uppercase tracking-wider">Category</th>
+                            @if(auth()->check() && (auth()->user()->user_type === 'admin') || (auth()->user()->user_type === 'employee'))
+                                <th class="px-6 py-2 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-600 uppercase tracking-wider">Quantity</th>
+                            @endif
+                            
+                            <th class="px-6 py-2 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-600 uppercase tracking-wider">Price</th>
                             <th class="px-6 py-2 border-b-2 border-gray-300 text-left text-sm leading-4 text-gray-600 uppercase tracking-wider">Action</th>
                         </tr>
                     </thead>
@@ -30,15 +35,27 @@
                             </td>
                             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-300">{{ $book->name }}</td>
                             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-300">{{ $book->category->name }}</td>
+                            @if(auth()->check() && (auth()->user()->user_type === 'admin') || (auth()->user()->user_type === 'employee'))
+                                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-300">{{ $book->qty }}</td>
+                            @endif
+                            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-300">Rs {{ round($book->price, 2) }}</td>
+
                             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-300">
-                                <a href="{{ route('book.edit', ['book' => $book->id]) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                    Edit
+                                <a href="{{ route('book.show', ['book' => $book->id]) }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                    View
                                 </a>
-                                <form method="POST" action="{{ route('book.destroy', $book->id) }}" class="inline-block">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2">Delete</button>
-                                </form>
+                                @if(auth()->check() && (auth()->user()->user_type === 'admin') || (auth()->user()->user_type === 'employee'))
+                                    <a href="{{ route('book.edit', ['book' => $book->id]) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2">
+                                        Edit
+                                    </a>
+
+                                    <form method="POST" action="{{ route('book.destroy', $book->id) }}" class="inline-block">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2">Delete</button>
+                                    </form>
+                                @endif
+                                
                             </td>
                         </tr> 
                         @empty

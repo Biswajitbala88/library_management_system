@@ -18,9 +18,12 @@
                     <x-nav-link :href="route('book.index')" :active="request()->routeIs('book.index')">
                         {{ __('Books') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('category.index')" :active="request()->routeIs('category')">
-                        {{ __('Category') }}
-                    </x-nav-link>
+                    @if(auth()->check() && (auth()->user()->user_type === 'admin') || (auth()->user()->user_type === 'employee'))
+                        <x-nav-link :href="route('category.index')" :active="request()->routeIs('category')">
+                            {{ __('Category') }}
+                        </x-nav-link>
+                    @endif
+                    
                 </div>
             </div>
 

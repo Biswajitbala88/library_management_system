@@ -2,6 +2,7 @@ Admin:
     Register,Edit and Delete new admin, new employee, new Student.
     Self Login.
     Add Books, Edit Books, Delete books, View books.
+    They can manage the stocks.
 
 
 
@@ -11,11 +12,20 @@ Employee:
     Register,Edit and Delete new Student.
     Self Login.
     Add Books, Edit Books, Delete books, View books.
+    They can manage the stocks.
 
 Student:
     Self registration, self login, delete account.
-    View books, Buy Book.
-    Receive all notification and update.
+    View books
+    Receive all buing and rental notification and update.
+    They can buy or rent an book.
+        If they buy a book -> he/she got a hard copy the book through the delivery person.
+        if the rent a book -> he/she got a access to read the book for a month.
+
+
+    payment should be payment getway.
+    get invoice through the mail and PDF.
+
 
 
 Database tables:

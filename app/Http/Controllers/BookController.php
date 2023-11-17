@@ -85,7 +85,7 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
-        //
+        return view('book.show', ['book' => $book]);
     }
 
     /**
@@ -95,7 +95,6 @@ class BookController extends Controller
     {
         $category = Category::all();
         $book = Book::find($book->id);
-
         // dd($book);
         return view('book.update')->with('category', $category)->with('book', $book);
     }
