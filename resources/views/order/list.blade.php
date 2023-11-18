@@ -8,11 +8,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="container mx-auto py-8">
-                <p class="mb-4 d-flex">Books
-                    <x-nav-link :href="route('book.create')" :active="request()->routeIs('category')" style="margin-left: auto; float: right;">
-                        {{ __('Add Book') }}
-                    </x-nav-link>
-                </p>
+                <p class="mb-4 d-flex">Orders</p>
                 <table class="w-full bg-white">
                     <thead>
                         <tr>

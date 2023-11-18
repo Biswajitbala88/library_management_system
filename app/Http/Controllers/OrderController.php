@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -13,7 +14,14 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        $books = Book::with('category')->get();
+
+        foreach ($books as $book) {
+            $categoryName = $book->category->name;
+            // Do something with $categoryName, like echoing or storing it
+        }
+        \Log::debug($books); // Check the Laravel log for the output
+        return view('order.list', compact('books'));
     }
 
     /**
@@ -30,7 +38,22 @@ class OrderController extends Controller
      */
     public function store(Request $request, Book $book)
     {
-        dd($request->all());
+        $order = new Order();
+        $user = Auth::user();
+        // dd($user->id);
+        $order->book_id = $request->book_id;
+        $order->qty = $request->qty;
+        $order->order_date = $request->order_date;
+        $order->order_type = $request->order_type;
+        $order->status = $request->status;
+        $order->invoice_no = $request->invoice_no;
+        $order->inv_date = $request->inv_date;
+        $order->total_amt = $request->total_amt;
+        $order->address = $request->address;
+        $order->user_id = $user->id;
+        $order->save();
+        return redirect()->route('order.index');
+
     }
 
     /**
