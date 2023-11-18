@@ -48,6 +48,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/book/{book}', [BookController::class, 'destroy'])->name('book.destroy');
     Route::get('/book/show/{book}', [BookController::class, 'show'])->name('book.show');
 
+    
+    
+    Route::get('/order', [OrderController::class, 'index'])->name('order.index');
     Route::get('/order/create/{book}', [OrderController::class, 'create'])->name('order.create');
     Route::post('/order/store/{book}', [OrderController::class, 'store'])->name('order.store');
     
