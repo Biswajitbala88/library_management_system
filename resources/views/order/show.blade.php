@@ -30,7 +30,7 @@
                     <p class="text-gray-700 leading-relaxed mb-5">
                         {{ $book->description }}
                     </p>
-                    <a href="{{ route('order.create', ['book'=>$book->id]) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+                    <a href="" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
                         Buy
                     </a>
                     <a href="" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2">
