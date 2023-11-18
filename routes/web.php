@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,6 +47,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/book/update/{book}', [BookController::class, 'update'])->name('book.update');
     Route::delete('/book/{book}', [BookController::class, 'destroy'])->name('book.destroy');
     Route::get('/book/show/{book}', [BookController::class, 'show'])->name('book.show');
+
+    Route::get('/order/create/{book}', [OrderController::class, 'create'])->name('order.create');
+    Route::post('/order/store/{book}', [OrderController::class, 'store'])->name('order.store');
     
 
 });
