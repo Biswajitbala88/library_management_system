@@ -32,4 +32,10 @@ Database tables:
     user: id, name, email, phone, photo, password, user type,
     book: id, name, category, description, price, image1, image2, qty, 
     oders: id, user_id, bood_id, qty, order_date, order_type, status, invoice_no, inv_date, total_amt, address, 
+            payment_mode, payment_status, trx_id
     subscription: id, user_id, total_amt, 
+
+
+
+
+after order form submit > payemnt page (total amout, select payment mode, enter UPI Id, submit) > once payment done should be redirect to order list page.

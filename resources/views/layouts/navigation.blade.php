@@ -23,6 +23,9 @@
                             {{ __('Category') }}
                         </x-nav-link>
                     @endif
+                    <x-nav-link :href="route('order.index')" :active="request()->routeIs('order.index')">
+                        {{ __('Orders') }}
+                    </x-nav-link>
                     
                 </div>
             </div>
