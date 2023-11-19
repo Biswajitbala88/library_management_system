@@ -14,14 +14,11 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $books = Book::with('category')->get();
-
-        foreach ($books as $book) {
-            $categoryName = $book->category->name;
-            // Do something with $categoryName, like echoing or storing it
-        }
-        \Log::debug($books); // Check the Laravel log for the output
-        return view('order.list', compact('books'));
+        $orders = Order::with('book')->get();
+        $orders->each(function ($order) {
+            $order->order_type = $order->order_type == '1' ? 'Buy' : 'Rent';
+        });
+        return view('order.list', compact('orders'));
     }
 
     /**
@@ -61,7 +58,6 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
     }
 
     /**
@@ -69,7 +65,9 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-        //
+        $orders = Order::with('book')->get();
+        return view('order.update')->with('order', $order);
+
     }
 
     /**
@@ -77,14 +75,32 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        //
+        $order = new Order();
+        $user = Auth::user();
+        // dd($user->id);
+        $order->book_id = $request->book_id;
+        $order->qty = $request->qty;
+        $order->order_date = $request->order_date;
+        $order->order_type = $request->order_type;
+        $order->status = $request->status;
+        $order->invoice_no = $request->invoice_no;
+        $order->inv_date = $request->inv_date;
+        $order->total_amt = $request->total_amt;
+        $order->address = $request->address;
+        $order->user_id = $user->id;
+        $order->save();
+        return redirect()->route('order.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Order $order)
+    public function updateStatus(Request $request, Order $order)
     {
-        //
+        $order->status = $request->status; // Update the status field
+        $order->save(); // Save the updated order
+
+        return redirect()->route('order.index'); // Redirect to the order index page
     }
+
 }
