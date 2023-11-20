@@ -10,7 +10,9 @@
                 @csrf
                 <input type="hidden" value="{{ $book->id }}" name="book_id">
                 <input type="hidden" value="{{ date('Y-m-d') }}" name="order_date">
-                <input type="hidden" value="pending" name="status">
+                @if(auth()->check() && (auth()->user()->user_type === 'student'))
+                    <input type="hidden" value="pending" name="status">
+                @endif
                 <input type="hidden" value="{{ 'INV-' . date('dy') . '-' . str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT) }}" name="invoice_no">
                 <input type="hidden" value="{{ date('Y-m-d') }}" name="inv_date">
 
@@ -25,6 +27,20 @@
                     </div>
                     <x-input-error :messages="$errors->get('qty')" class="mt-2" />
                 </div>
+                @if(auth()->check() && (auth()->user()->user_type !== 'student'))
+                    <div class="mt-4 mb-3">
+                        <x-input-label for="status" :value="__('Order Status')" />
+                        <div class="relative">
+                            <select class="block appearance-none w-full bg-white border border-gray-300 hover:border-gray-400 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" name="status">
+                                <option value="" selected>Select Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="delivered">Delivered</option>
+                            </select>
+                        </div>
+                        <x-input-error :messages="$errors->get('status')" class="mt-2" />
+                    </div>
+                @endif
+                
                 <div class="mt-4">
                     <x-input-label for="qty" :value="__('Quantity')" />
                     <x-text-input id="qty" class="block mt-1 w-full" type="number" name="qty" value="" min="1" />
@@ -36,6 +52,19 @@
                     <textarea name="address" rows="4" class="w-full"></textarea>
                     <x-input-error :messages="$errors->get('address')" class="mt-2" />
                 </div>
+                <div class="mt-4 mb-3">
+                    <x-input-label for="payment_status" :value="__('Payment Status')" />
+                    <div class="relative">
+                        <select class="block appearance-none w-full bg-white border border-gray-300 hover:border-gray-400 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" name="payment_status">
+                            <option value="" selected>Select Status</option>
+                            <option value="paid">Paid</option>
+                            <option value="unpaid">Unpaid</option>
+                        </select>
+                    </div>
+                    <x-input-error :messages="$errors->get('payment_status')" class="mt-2" />
+                </div>
+
+                
 
                 <input type="hidden" name="total_amt" id="hiddenTotalAmount" value="{{ $book->price * $book->qty }}">
 
