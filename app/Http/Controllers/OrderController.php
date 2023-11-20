@@ -18,6 +18,12 @@ class OrderController extends Controller
         $orders->each(function ($order) {
             $order->order_type = $order->order_type == '1' ? 'Buy' : 'Rent';
         });
+        $orders->each(function ($order) {
+            $order->status = $order->status == 'pending' ? 'Pending' : 'Delivered';
+        });
+        $orders->each(function ($order) {
+            $order->payment_status = $order->payment_status == 'paid' ? 'Paid' : 'Unpaid';
+        });
         return view('order.list', compact('orders'));
     }
 
@@ -37,7 +43,7 @@ class OrderController extends Controller
     {
         $order = new Order();
         $user = Auth::user();
-        // dd($user->id);
+        // dd($request->all());
         $order->book_id = $request->book_id;
         $order->qty = $request->qty;
         $order->order_date = $request->order_date;
@@ -47,6 +53,13 @@ class OrderController extends Controller
         $order->inv_date = $request->inv_date;
         $order->total_amt = $request->total_amt;
         $order->address = $request->address;
+        $order->payment_status = $request->payment_status;
+        if($request->payment_status == 'paid'){
+            $order->transaction_id = 'TRX' . date('dy'). str_pad(mt_rand(1, 9999), 6, '0', STR_PAD_LEFT);
+        }else{
+            $order->transaction_id = '';
+        }
+        // dd($order->transaction_id);
         $order->user_id = $user->id;
         $order->save();
         return redirect()->route('order.index');
@@ -87,6 +100,12 @@ class OrderController extends Controller
         $order->inv_date = $request->inv_date;
         $order->total_amt = $request->total_amt;
         $order->address = $request->address;
+        $order->payment_status = $request->payment_status;
+        if($request->payment_status == 'paid'){
+            $order->transaction_id = 'TRX' . date('dy'). str_pad(mt_rand(1, 9999), 6, '0', STR_PAD_LEFT);
+        }else{
+            $order->transaction_id = '';
+        }
         $order->user_id = $user->id;
         $order->save();
         return redirect()->route('order.index');

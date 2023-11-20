@@ -52,22 +52,29 @@
                                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-300">{{ $order->address }}</td>
                                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-300 ">
                                     
-                                    @if ($order->status != 'cancel')
-                                        <a href="{{ route('order.edit', ['order' => $order->id]) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2">
-                                            Update
-                                        </a>
-                                        <form method="POST" action="{{ route('order.updateStatus', $order->id) }}" class="inline-block">
-                                            @csrf
-                                            @method('POST')
-                                            <input type="hidden" value="cancel" name="status">
-
-                                            <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2">Cancel</button>
-                                        </form> 
-                                        @if ($order->payment_status != 'paid')
-                                            <a href="{{ route('order.edit', ['order' => $order->id]) }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2">
-                                                Pay
+                                    @if ($order->status != 'Cancel')
+                                        @if (($order->status == 'Delivered') && ($order->payment_status == 'Paid'))
+                                            <a href="" class="bg-yellow-500 hover:bg-yellow-700 text-dark font-bold py-2 px-4 rounded ml-2">
+                                                Invoice
                                             </a>
+                                        @else
+                                            <a href="{{ route('order.edit', ['order' => $order->id]) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2">
+                                                Update
+                                            </a>
+                                            <form method="POST" action="{{ route('order.updateStatus', $order->id) }}" class="inline-block">
+                                                @csrf
+                                                @method('POST')
+                                                <input type="hidden" value="cancel" name="status">
+
+                                                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2">Cancel</button>
+                                            </form> 
+                                            @if ($order->payment_status == 'Unpaid')
+                                                <a href="{{ route('order.edit', ['order' => $order->id]) }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2">
+                                                    Pay
+                                                </a>
+                                            @endif
                                         @endif
+                                        
                                     @else
                                         <button class="bg-gray-400 text-white font-bold py-2 px-4 rounded ml-2" disabled>Canceled</button>
                                     @endif
