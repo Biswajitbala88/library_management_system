@@ -56,6 +56,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/order/edit/{order}', [OrderController::class, 'edit'])->name('order.edit');
     Route::post('/order/update/{order}', [OrderController::class, 'update'])->name('order.update');
     Route::post('/order/{order}', [OrderController::class, 'updateStatus'])->name('order.updateStatus');
+
+
+    Route::get('/generate-pdf', [OrderController::class, 'generatePDF']);
     
 
 });
