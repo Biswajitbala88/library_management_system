@@ -6,6 +6,8 @@ use App\Models\Order;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use PDF; 
+
 
 class OrderController extends Controller
 {
@@ -114,12 +116,29 @@ class OrderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function updateStatus(Request $request, Order $order)
+    public function generatePDF()
     {
-        $order->status = $request->status; // Update the status field
-        $order->save(); // Save the updated order
+        $invoiceData = [
+            'invoiceNumber' => 'INV-12345',
+            'invoiceDate' => date('Y-m-d'),
+            'items' => [
+                ['description' => 'Item 1', 'quantity' => 2, 'price' => 25],
+                ['description' => 'Item 2', 'quantity' => 1, 'price' => 40],
+                // Add more items as needed
+            ],
+            // Calculate total amount
+            'totalAmount' => 2 * 25 + 1 * 40,
+        ];
 
-        return redirect()->route('order.index'); // Redirect to the order index page
+        $pdf = PDF::loadView('pdf.sample', $invoiceData);
+
+        // Generate a unique file name
+        $fileName = 'sample_' . time() . '.pdf';
+
+        // Save the PDF to the storage path (or any desired location)
+        $pdf->save(storage_path('app/public/' . $fileName));
+
+        // Return the file path or a response with the file as an attachment
+        return response()->download(storage_path('app/public/' . $fileName), $fileName);
     }
-
 }
