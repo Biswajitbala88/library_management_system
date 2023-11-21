@@ -34,7 +34,7 @@ Database tables:
     oders: id, user_id, bood_id, qty, order_date, order_type, status, invoice_no, inv_date, total_amt, address, 
             payment_mode, payment_status, trx_id
     subscription: id, user_id, total_amt, 
-    Invoice: id, invoice_no, invoice_date, 
+    Invoice: id, invoice_no, invoice_date, order_id, user_id.
 
 
 
