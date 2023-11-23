@@ -58,7 +58,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/order/{order}', [OrderController::class, 'updateStatus'])->name('order.updateStatus');
 
 
-    Route::get('/generate-pdf', [OrderController::class, 'generatePDF']);
+    Route::post('/generate-pdf', [OrderController::class, 'generateInvoice']);
     
 
 });
