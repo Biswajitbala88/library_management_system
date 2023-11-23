@@ -91,7 +91,7 @@ class OrderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Order $order)
+    public function update(Request $request, Order $order,InvoiceController $invoiceController)
     {
         $order = new Order();
         $user = Auth::user();
@@ -115,10 +115,11 @@ class OrderController extends Controller
         }
         if ($request->payment_status == 'paid' && $request->status == 'delivered') {
             $invoice = new Invoice();
-            $invoiceController->generateInvoice($orderId, $userId);
+            $invoiceData = $invoiceController->generateInvoice($orderId, $userId);
         }
         $order->user_id = $user->id;
-        // $order->save();
+        $order->save();
+        // dd($invoiceData);
         return redirect()->route('order.index');
     }
 

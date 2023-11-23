@@ -58,10 +58,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/order/{order}', [OrderController::class, 'updateStatus'])->name('order.updateStatus');
 
 
-    Route::post('/generate-pdf', [OrderController::class, 'generateInvoice']);
+    Route::post('/generate-pdf', [InvoiceController::class, 'getInvoice']);
     
 
 });
+
 
 Route::get('/admin_register', [RegisteredUserController::class, 'index']);
 
