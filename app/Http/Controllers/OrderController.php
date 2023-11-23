@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Book;
+use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\InvoiceController;
+
 use PDF; 
 
 
@@ -93,6 +96,8 @@ class OrderController extends Controller
         $order = new Order();
         $user = Auth::user();
         // dd($user->id);
+        $orderId = $request->order_id;
+        $userId = $user->id;
         $order->book_id = $request->book_id;
         $order->qty = $request->qty;
         $order->order_date = $request->order_date;
@@ -108,37 +113,16 @@ class OrderController extends Controller
         }else{
             $order->transaction_id = '';
         }
+        if ($request->payment_status == 'paid' && $request->status == 'delivered') {
+            $invoice = new Invoice();
+            $invoiceController->generateInvoice($orderId, $userId);
+        }
         $order->user_id = $user->id;
-        $order->save();
+        // $order->save();
         return redirect()->route('order.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function generatePDF()
-    {
-        $invoiceData = [
-            'invoiceNumber' => 'INV-12345',
-            'invoiceDate' => date('Y-m-d'),
-            'items' => [
-                ['description' => 'Item 1', 'quantity' => 2, 'price' => 25],
-                ['description' => 'Item 2', 'quantity' => 1, 'price' => 40],
-                // Add more items as needed
-            ],
-            // Calculate total amount
-            'totalAmount' => 2 * 25 + 1 * 40,
-        ];
-
-        $pdf = PDF::loadView('pdf.sample', $invoiceData);
-
-        // Generate a unique file name
-        $fileName = 'sample_' . time() . '.pdf';
-
-        // Save the PDF to the storage path (or any desired location)
-        $pdf->save(storage_path('app/public/' . $fileName));
-
-        // Return the file path or a response with the file as an attachment
-        return response()->download(storage_path('app/public/' . $fileName), $fileName);
-    }
-}
+}   

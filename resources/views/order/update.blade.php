@@ -9,6 +9,7 @@
             <h4 class="mb-3">{{ $order->book->name.' - ('. $order->qty.')' }}</h4>
             <form method="POST" action="{{ route('order.update', $order) }}" enctype="multipart/form-data">
                 @csrf
+                <input type="hidden" name="order_id" id="" value="{{ $order->id }}">
                 <input type="hidden" value="{{ $order->book_id }}" name="book_id">
                 <input type="hidden" value="{{ $order->order_date }}" name="order_date">
                 @if(auth()->check() && (auth()->user()->user_type === 'student'))
