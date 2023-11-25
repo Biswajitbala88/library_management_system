@@ -54,7 +54,7 @@
                                     
                                     @if ($order->status != 'Cancel')
                                         @if (($order->status == 'Delivered') && ($order->payment_status == 'Paid'))
-                                            <a href="" class="bg-yellow-500 hover:bg-yellow-700 text-dark font-bold py-2 px-4 rounded ml-2">
+                                            <a href="{{ route('invoice.show', ['order' => $order->id]) }}" class="bg-yellow-500 hover:bg-yellow-700 text-dark font-bold py-2 px-4 rounded ml-2">
                                                 Invoice
                                             </a>
                                         @else
