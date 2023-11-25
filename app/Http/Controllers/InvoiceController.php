@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Models\Order;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\PDF;
+
+
 
 class InvoiceController extends Controller
 {
@@ -34,9 +38,12 @@ class InvoiceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Invoice $invoice)
+    public function show(Order $order)
     {
-        //
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('pdf.sample', ['order' => $order]);
+        $fileName = $order->invoice_no;
+        return $pdf->stream($fileName.'.pdf');
     }
 
     /**
