@@ -57,7 +57,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/order/store/{book}', [OrderController::class, 'store'])->name('order.store');
     Route::get('/order/edit/{order}', [OrderController::class, 'edit'])->name('order.edit');
     Route::post('/order/update/{order}', [OrderController::class, 'update'])->name('order.update');
-    Route::post('/order/{order}', [OrderController::class, 'show'])->name('order.updateStatus');
+    Route::post('/order/{order}', [OrderController::class, 'cancelOrder'])->name('order.cancelOrder');
 
 
     Route::get('/invoice/show/{order}', [InvoiceController::class, 'show'])->name('invoice.show');

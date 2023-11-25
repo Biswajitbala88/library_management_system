@@ -54,14 +54,14 @@
                                     
                                     @if ($order->status != 'Cancel')
                                         @if (($order->status == 'Delivered') && ($order->payment_status == 'Paid'))
-                                            <a href="{{ route('invoice.show', ['order' => $order->id]) }}" class="bg-yellow-500 hover:bg-yellow-700 text-dark font-bold py-2 px-4 rounded ml-2">
+                                            <a href="{{ route('invoice.show', ['order' => $order->id]) }}" class="bg-yellow-500 hover:bg-yellow-700 text-dark font-bold py-2 px-4 rounded ml-2" target="_blank">
                                                 Invoice
                                             </a>
                                         @else
                                             <a href="{{ route('order.edit', ['order' => $order->id]) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2">
                                                 Update
                                             </a>
-                                            <form method="POST" action="{{ route('order.updateStatus', $order->id) }}" class="inline-block">
+                                            <form method="POST" action="{{ route('order.cancelOrder', $order->id) }}" class="inline-block">
                                                 @csrf
                                                 @method('POST')
                                                 <input type="hidden" value="cancel" name="status">
@@ -82,7 +82,11 @@
                                 </td>
                             </tr> 
                             @empty
-                                <p class="text-red-500 text-center p-2">No data found</p>
+                            <tr class="whitespace-nowrap">
+                                <td colspan="14">
+                                    <p class="text-red-500 text-center p-2">No data found</p>
+                                </td>
+                            </tr>
                             @endforelse
                             
                             <!-- Repeat the above row for each table row -->
