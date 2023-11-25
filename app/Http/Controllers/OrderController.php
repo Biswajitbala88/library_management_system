@@ -8,6 +8,9 @@ use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\InvoiceController;
+use App\Mail\OrderUpdated;
+use Illuminate\Support\Facades\Mail;
+
 
 use PDF; 
 
@@ -24,7 +27,7 @@ class OrderController extends Controller
             $order->order_type = $order->order_type == '1' ? 'Buy' : 'Rent';
         });
         $orders->each(function ($order) {
-            $order->status = $order->status == 'pending' ? 'Pending' : 'Delivered';
+            $order->status = $order->status == 'pending' ? 'Pending' : ($order->status == 'cancel' ? 'Cancel' : 'Delivered');
         });
         $orders->each(function ($order) {
             $order->payment_status = $order->payment_status == 'paid' ? 'Paid' : 'Unpaid';
@@ -64,9 +67,14 @@ class OrderController extends Controller
         }else{
             $order->transaction_id = '';
         }
-        // dd($order->transaction_id);
+        if ($request->payment_status == 'paid' && $request->status == 'delivered') {
+            $invoice = new Invoice();
+            $invoiceData = $invoiceController->generateInvoice($orderId, $userId);
+        }
         $order->user_id = $user->id;
         $order->save();
+        $userEmail = $user->email;
+        Mail::to($userEmail)->send(new OrderUpdated($order));
         return redirect()->route('order.index');
 
     }
@@ -93,7 +101,7 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order,InvoiceController $invoiceController)
     {
-        $order = new Order();
+        $order = Order::find($order->id);
         $user = Auth::user();
         // dd($user->id);
         $orderId = $request->order_id;
@@ -119,11 +127,21 @@ class OrderController extends Controller
         }
         $order->user_id = $user->id;
         $order->save();
-        // dd($invoiceData);
+        $userEmail = $user->email;
+        Mail::to($userEmail)->send(new OrderUpdated($order));
         return redirect()->route('order.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
+    public function cancelOrder(Request $request, Order $order)
+    {
+        $order = Order::find($order->id);
+        $order->status = $request->status;
+        $order->save();
+        return redirect()->route('order.index');
+    }
+
+
 }   

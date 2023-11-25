@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice Template</title>
+    <title>{{ $order->invoice_no }}</title>
     <!-- Include Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
@@ -17,11 +17,10 @@
         <div class="flex justify-between mb-6">
             <div>
                 <h1 class="text-2xl font-bold">Invoice</h1>
-                <p class="text-gray-600 mt-2">Invoice #INV-12345</p>
+                <p class="text-gray-600 mt-2">Invoice #{{ $order->invoice_no }}</p>
             </div>
             <div>
-                <p class="text-gray-600">Date: January 1, 2023</p>
-                <p class="text-gray-600 mt-2">Due Date: January 15, 2023</p>
+                <p class="text-gray-600">Date: {{ $order->inv_date }}</p>
             </div>
         </div>
 
@@ -29,7 +28,7 @@
             <table class="w-full">
                 <thead>
                     <tr>
-                        <th class="text-left py-2">Description</th>
+                        <th class="text-left py-2">Book</th>
                         <th class="text-left py-2">Quantity</th>
                         <th class="text-left py-2">Price</th>
                         <th class="text-left py-2">Total</th>
@@ -37,42 +36,40 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="py-2">Product 1</td>
-                        <td class="py-2">2</td>
-                        <td class="py-2">$50.00</td>
-                        <td class="py-2">$100.00</td>
+                        <td class="py-2">{{ $order->book->name }}</td>
+                        <td class="py-2">{{ $order->qty }}</td>
+                        <td class="py-2">${{ $order->book->price }}</td>
+                        <td class="py-2">${{ $order->total_amt }}</td>
                     </tr>
-                    <tr>
-                        <td class="py-2">Product 2</td>
-                        <td class="py-2">1</td>
-                        <td class="py-2">$80.00</td>
-                        <td class="py-2">$80.00</td>
-                    </tr>
-                    <!-- Add more rows for other products or services -->
                 </tbody>
             </table>
         </div>
 
         <div class="flex justify-end">
             <div class="text-right">
-                <p class="text-gray-600">Subtotal: $180.00</p>
-                <p class="text-gray-600 mt-2">Tax (10%): $18.00</p>
-                <p class="text-2xl font-bold mt-4">Total: $198.00</p>
+                <p class="text-gray-600">Subtotal: ${{ $order->total_amt }}</p>
+                @php
+                    $gstAmt = $order->total_amt * 0.1;
+                    $totalAmt = $order->total_amt + $gstAmt;
+                @endphp
+                <p class="text-gray-600 mt-2">Tax (10%): ${{ $gstAmt }}</p>
+                <p class="text-2xl font-bold mt-4">Total: ${{ $totalAmt }}</p>
             </div>
         </div>
 
         <div class="mt-8">
             <h2 class="text-lg font-semibold">Payment Details</h2>
-            <p class="text-gray-600 mt-2">Payment method: Credit Card</p>
-            <p class="text-gray-600 mt-2">Card ending: XXXX XXXX XXXX 1234</p>
+            <p class="text-gray-600 mt-2">Payment method: {{ $order->payment_mode }}</p>
+            <p class="text-gray-600 mt-2">Payment Status: <span class="text-xl font-bold">{{ $order->payment_status == 'paid' ? 'Paid' : 'Not Paid' }}</span></p>
+            <p class="text-gray-600 mt-2">TRANSACTION ID: {{ $order->transaction_id }}</p>
         </div>
 
         <div class="mt-8">
             <h2 class="text-lg font-semibold">Billing Information</h2>
-            <p class="text-gray-600 mt-2">John Doe</p>
-            <p class="text-gray-600">123 Main Street</p>
-            <p class="text-gray-600">City, State, ZIP</p>
-            <p class="text-gray-600">Country</p>
+            <p class="text-gray-600 mt-2">{{ $order->user->name }}</p>
+            <p class="text-gray-600">{{ $order->user->email }}</p>
+            <p class="text-gray-600">{{ $order->user->phone }}</p>
+            <p class="text-gray-600">{{ $order->address }}</p>
         </div>
     </div>
 </body>

@@ -58,8 +58,8 @@
                     <div class="relative">
                         <select class="block appearance-none w-full bg-white border border-gray-300 hover:border-gray-400 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" name="payment_status">
                             <option value="" selected>Select Status</option>
-                            <option value="paid" {{ $order->payment_status == 'Paid' ? 'paid' : '' }}>Paid</option>
-                            <option value="unpaid" {{ $order->payment_status == 'Unpaid' ? 'unpaid' : '' }}>Unpaid</option>
+                            <option value="paid" {{ $order->payment_status == 'paid' ? 'selected' : '' }}>Paid</option>
+                            <option value="unpaid" {{ $order->payment_status == 'unpaid' ? 'selected' : '' }}>Unpaid</option>
                         </select>
                     </div>
                     <x-input-error :messages="$errors->get('payment_status')" class="mt-2" />
