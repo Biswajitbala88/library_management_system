@@ -42,7 +42,7 @@ class InvoiceController extends Controller
     {
         $orderWithUser = $order->load('user');
         $pdf = app('dompdf.wrapper');
-        $pdf->loadView('pdf.sample', ['order' => $orderWithUser]);
+        $pdf->loadView('invoice.invoice', ['order' => $orderWithUser]);
         $fileName = $order->invoice_no;
         return $pdf->stream($fileName.'.pdf');
     }

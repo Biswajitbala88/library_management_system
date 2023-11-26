@@ -22,17 +22,23 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::with('book')->get();
-        $orders->each(function ($order) {
-            $order->order_type = $order->order_type == '1' ? 'Buy' : 'Rent';
-        });
-        $orders->each(function ($order) {
-            $order->status = $order->status == 'pending' ? 'Pending' : ($order->status == 'cancel' ? 'Cancel' : 'Delivered');
-        });
-        $orders->each(function ($order) {
-            $order->payment_status = $order->payment_status == 'paid' ? 'Paid' : 'Unpaid';
-        });
-        return view('order.list', compact('orders'));
+        if (Auth::check()) {
+            $user = Auth::user();
+            $orders = $user->orders()->with('book')->get();
+            // $orders = Order::with('book')->get();
+            $orders->each(function ($order) {
+                $order->order_type = $order->order_type == '1' ? 'Buy' : 'Rent';
+            });
+            $orders->each(function ($order) {
+                $order->status = $order->status == 'pending' ? 'Pending' : ($order->status == 'cancel' ? 'Cancel' : 'Delivered');
+            });
+            $orders->each(function ($order) {
+                $order->payment_status = $order->payment_status == 'paid' ? 'Paid' : 'Unpaid';
+            });
+            return view('order.list', compact('orders'));
+        }else{
+            return redirect()->route('login');
+        }
     }
 
     /**
@@ -62,6 +68,8 @@ class OrderController extends Controller
         $order->total_amt = $request->total_amt;
         $order->address = $request->address;
         $order->payment_status = $request->payment_status;
+        $order->payment_mode = $request->payment_mode;
+
         if($request->payment_status == 'paid'){
             $order->transaction_id = 'TRX' . date('dy'). str_pad(mt_rand(1, 9999), 6, '0', STR_PAD_LEFT);
         }else{
@@ -74,7 +82,7 @@ class OrderController extends Controller
         $order->user_id = $user->id;
         $order->save();
         $userEmail = $user->email;
-        Mail::to($userEmail)->send(new OrderUpdated($order));
+        // Mail::to($userEmail)->send(new OrderUpdated($order));
         return redirect()->route('order.index');
 
     }

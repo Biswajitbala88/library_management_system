@@ -6,6 +6,9 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\RazorpayController;
+use App\Http\Controllers\RazorpayPaymentController;
+
 
 use Illuminate\Support\Facades\Route;
 
@@ -59,8 +62,19 @@ Route::middleware('auth')->group(function () {
     Route::post('/order/update/{order}', [OrderController::class, 'update'])->name('order.update');
     Route::post('/order/{order}', [OrderController::class, 'cancelOrder'])->name('order.cancelOrder');
 
-
     Route::get('/invoice/show/{order}', [InvoiceController::class, 'show'])->name('invoice.show');
+
+    Route::name('razorpay.')
+    ->controller(RazorpayController::class)
+    ->prefix('razorpay')
+    ->group(function () {
+        Route::view('payment', 'razorpay.index')->name('create.payment');
+        Route::post('handle-payment', 'handlePayment')->name('make.payment');
+    });
+
+
+    Route::get('razorpay-payment/{order}', [RazorpayPaymentController::class, 'index'])->name('razorpay.index');
+    Route::post('razorpay-payment', [RazorpayPaymentController::class, 'store'])->name('razorpay.payment.store');
     
 
 });
