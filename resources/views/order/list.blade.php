@@ -69,7 +69,7 @@
                                                 <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2">Cancel</button>
                                             </form> 
                                             @if ($order->payment_status == 'Unpaid')
-                                                <a href="{{ route('order.edit', ['order' => $order->id]) }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2">
+                                                <a href="{{ route('razorpay.index', ['order' => $order->id]) }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2">
                                                     Pay
                                                 </a>
                                             @endif
