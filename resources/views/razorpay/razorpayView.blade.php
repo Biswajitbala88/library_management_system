@@ -27,9 +27,6 @@
                                 <span class="block sm:inline">{{ $message }}</span>
                             </div>
                         @endif
-                            @php
-                                // dd($order);
-                            @endphp
                         <div class="bg-white shadow-md rounded-lg p-6 mt-6">
                             <h2 class="text-2xl font-bold mb-6 text-center">Order Summery</h2>
                             <p class="">Order Id: #{{ $order->user_id }}</p>

@@ -2,11 +2,13 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <h1 class="text-3xl md:text-5xl font-extrabold text-center uppercase mb-12 bg-gradient-to-r from-indigo-400 via-purple-500 to-indigo-600 bg-clip-text text-transparent transform -rotate-2">Razorpay Payment Gateway</h1>
+
             @if (session()->has('success'))
                 <div class="alert alert-success">
                     {{ session()->get('success') }}
                 </div>
             @endif
+
             <center>
                 <form action="{{ route('razorpay.make.payment') }}" method="POST" >
                     @csrf 
@@ -17,8 +19,8 @@
                             data-name="Laravelia"
                             data-description="A demo razorpay payment"
                             data-image="https://www.laravelia.com/storage/logo.png"
-                            data-prefill.name="Mahedi Hasan"
-                            data-prefill.email="mahedy150101@gmail.com"
+                            data-prefill.name="Biswajit Bala"
+                            data-prefill.email="biswajitbala88@gmail.com"
                             data-theme.color="#ff7529">
                     </script>
                 </form>
